@@ -24,7 +24,7 @@ public class DistributedLockService {
                 System.out.println("Lock acquired: " + lockName);
 
                 // Critical section (e.g., updating a shared resource)
-                Thread.sleep(5000);
+                Thread.sleep(10000);
                 System.out.println("Work done inside lock.");
 
             } else {
