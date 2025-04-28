@@ -19,7 +19,7 @@ public class DistributedLockService {
 
         try {
             // Try to get the lock (wait up to 5 seconds, auto-release after 10 seconds)
-            isLocked = lock.tryLock(5, 10, TimeUnit.SECONDS);
+            isLocked = lock.tryLock(2, 10, TimeUnit.SECONDS);
             if (isLocked) {
                 System.out.println("Lock acquired: " + lockName);
 
