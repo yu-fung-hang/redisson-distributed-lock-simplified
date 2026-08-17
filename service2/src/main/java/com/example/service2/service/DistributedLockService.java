@@ -14,12 +14,12 @@ public class DistributedLockService {
     private final RedissonClient redissonClient;
 
     public void doWorkWithLock(String lockName) {
-        RLock lock = redissonClient.getLock(lockName);
+        RLock rLock = redissonClient.getLock(lockName);
         boolean isLocked = false;
 
         try {
             // Try to get the lock (wait up to 5 seconds, auto-release after 10 seconds)
-            isLocked = lock.tryLock(2, 10, TimeUnit.SECONDS);
+            isLocked = rLock.tryLock(2, 10, TimeUnit.SECONDS);
             if (isLocked) {
                 System.out.println("Lock acquired: " + lockName);
 
@@ -33,8 +33,8 @@ public class DistributedLockService {
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
-            if (isLocked && lock.isHeldByCurrentThread()) {
-                lock.unlock();
+            if (isLocked && rLock.isHeldByCurrentThread()) {
+                rLock.unlock();
                 System.out.println("Lock released: " + lockName);
             }
         }
