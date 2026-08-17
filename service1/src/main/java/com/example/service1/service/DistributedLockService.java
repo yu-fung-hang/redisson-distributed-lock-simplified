@@ -21,12 +21,12 @@ public class DistributedLockService {
         try {
             // Try to get the lock (wait up to 15 seconds, auto-release after 10 seconds)
             System.out.println("[" + LocalTime.now() + "] " + "Service1 tried to acquire Lock " + lockName);
-            isLocked = rLock.tryLock(10, 8, TimeUnit.SECONDS);
+            isLocked = rLock.tryLock(15, 12, TimeUnit.SECONDS);
             if (isLocked) {
                 System.out.println("[" + LocalTime.now() + "] " + "Lock acquired: " + lockName);
 
                 // Critical section (e.g., updating a shared resource)
-                Thread.sleep(5000);
+                Thread.sleep(10000);
                 System.out.println("[" + LocalTime.now() + "] " + "Work done inside the lock.");
 
             } else {
