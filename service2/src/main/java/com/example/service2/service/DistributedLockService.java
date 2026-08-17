@@ -5,6 +5,7 @@ import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -18,24 +19,25 @@ public class DistributedLockService {
         boolean isLocked = false;
 
         try {
-            // Try to get the lock (wait up to 5 seconds, auto-release after 10 seconds)
+            // Try to get the lock (wait up to 15 seconds, auto-release after 10 seconds)
+            System.out.println("[" + LocalTime.now() + "] " + "Service2 tried to acquire Lock " + lockName);
             isLocked = rLock.tryLock(10, 8, TimeUnit.SECONDS);
             if (isLocked) {
-                System.out.println("Lock acquired: " + lockName);
+                System.out.println("[" + LocalTime.now() + "] " + "Lock acquired: " + lockName);
 
                 // Critical section (e.g., updating a shared resource)
                 Thread.sleep(5000);
-                System.out.println("Work done inside lock.");
+                System.out.println("[" + LocalTime.now() + "] " + "Work done inside the lock.");
 
             } else {
-                System.out.println("Could not acquire lock: " + lockName);
+                System.out.println("[" + LocalTime.now() + "] " + "Could not acquire lock: " + lockName);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
             if (isLocked && rLock.isHeldByCurrentThread()) {
                 rLock.unlock();
-                System.out.println("Lock released: " + lockName);
+                System.out.println("[" + LocalTime.now() + "] " + "Service2 released lock: " + lockName);
             }
         }
     }
